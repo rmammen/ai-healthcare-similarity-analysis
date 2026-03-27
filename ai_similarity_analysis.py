@@ -1,52 +1,79 @@
+# Build the dataset
 import pandas as pd
-from sklearn.metrics.pairwise import cosine_similarity
 
-# Create feature dataset
 data = {
     "Tool": [
-        "ChatGPT",
-        "Ada Health",
-        "Buoy Health",
-        "WebMD",
-        "Mayo Clinic",
-        "MedlinePlus",
-        "NHS 111"
+        "ChatGPT", "Ada Health", "Buoy Health", "WebMD", "Mayo Clinic",
+        "MedlinePlus", "NHS 111", "Cleveland Clinic", "Healthline",
+        "K Health", "Symptoma", "Teladoc", "Zocdoc"
     ],
-    "AI": [1, 1, 1, 0, 0, 0, 0],
-    "Symptom_Checker": [0, 1, 1, 1, 1, 0, 1],
-    "Education": [1, 0, 0, 1, 1, 1, 0],
-    "Navigation": [1, 1, 1, 0, 1, 0, 1]
+    "AI_Based": [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0],
+    "Symptom_Checker": [0, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 0, 0],
+    "Patient_Education": [1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0],
+    "Care_Navigation": [1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1],
+    "Telehealth": [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0],
+    "Appointment_Booking": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
 }
 
 df = pd.DataFrame(data)
-df.set_index("Tool", inplace=True)
+df.to_csv("health_tool_features.csv", index=False)
 
-print("Feature dataset:")
 print(df)
 
-# Compute cosine similarity
-similarity_matrix = cosine_similarity(df)
+# Compute Cosine Similarity 
+from sklearn.metrics.pairwise import cosine_similarity
+
+features_df = df.set_index("Tool")
+
+similarity_matrix = cosine_similarity(features_df)
 
 similarity_df = pd.DataFrame(
     similarity_matrix,
-    index=df.index,
-    columns=df.index
+    index=features_df.index,
+    columns=features_df.index
 )
 
-print("\nCosine similarity matrix:")
 print(similarity_df.round(3))
-
-# Save similarity matrix
 similarity_df.to_csv("similarity_matrix.csv")
 
-# Function to get ranked similar tools
-def get_top_similar(tool_name, similarity_df):
+# Get top 10 similar tools for each query 
+def get_top_similar(tool_name, similarity_df, top_n=10):
     scores = similarity_df[tool_name].sort_values(ascending=False)
-    scores = scores.drop(tool_name)  # remove self-match
-    return scores
+    scores = scores.drop(tool_name)
+    return scores.head(top_n)
 
 queries = ["Ada Health", "ChatGPT", "WebMD"]
 
 for query in queries:
-    print(f"\nMost similar tools to {query}:")
+    print(f"\nTop similar tools to {query}:")
     print(get_top_similar(query, similarity_df).round(3))
+
+# Save ranked result to CSV 
+all_rankings = []
+
+for query in queries:
+    top_results = get_top_similar(query, similarity_df, top_n=10)
+    for rank, (tool, score) in enumerate(top_results.items(), start=1):
+        all_rankings.append({
+            "Query_Tool": query,
+            "Rank": rank,
+            "Similar_Tool": tool,
+            "Cosine_Similarity": round(score, 3)
+        })
+
+rankings_df = pd.DataFrame(all_rankings)
+rankings_df.to_csv("top_similarity_rankings.csv", index=False)
+
+print(rankings_df)
+
+# Create a heatmap
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 8))
+plt.imshow(similarity_df, interpolation="nearest", aspect="auto")
+plt.colorbar(label="Cosine Similarity")
+plt.xticks(range(len(similarity_df.columns)), similarity_df.columns, rotation=90)
+plt.yticks(range(len(similarity_df.index)), similarity_df.index)
+plt.title("Cosine Similarity Between Digital Healthcare Tools")
+plt.tight_layout()
+plt.show()
