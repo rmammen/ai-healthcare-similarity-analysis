@@ -1,0 +1,31 @@
+Query_Tool,Rank,Similar_Tool,Cosine_Similarity
+Ada Health,1,Buoy Health,1.0
+Ada Health,2,Symptoma,1.0
+Ada Health,3,NHS 111,0.816
+Ada Health,4,K Health,0.775
+Ada Health,5,ChatGPT,0.667
+Ada Health,6,Mayo Clinic,0.667
+Ada Health,7,WebMD,0.408
+Ada Health,8,Cleveland Clinic,0.408
+Ada Health,9,Teladoc,0.408
+Ada Health,10,Zocdoc,0.408
+ChatGPT,1,K Health,0.775
+ChatGPT,2,Ada Health,0.667
+ChatGPT,3,Mayo Clinic,0.667
+ChatGPT,4,Buoy Health,0.667
+ChatGPT,5,Symptoma,0.667
+ChatGPT,6,MedlinePlus,0.577
+ChatGPT,7,Healthline,0.577
+ChatGPT,8,WebMD,0.408
+ChatGPT,9,Cleveland Clinic,0.408
+ChatGPT,10,NHS 111,0.408
+WebMD,1,Cleveland Clinic,1.0
+WebMD,2,Mayo Clinic,0.816
+WebMD,3,MedlinePlus,0.707
+WebMD,4,Healthline,0.707
+WebMD,5,K Health,0.632
+WebMD,6,NHS 111,0.5
+WebMD,7,ChatGPT,0.408
+WebMD,8,Buoy Health,0.408
+WebMD,9,Ada Health,0.408
+WebMD,10,Symptoma,0.408

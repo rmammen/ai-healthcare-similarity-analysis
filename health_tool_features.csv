@@ -1,0 +1,14 @@
+Tool,AI_Based,Symptom_Checker,Patient_Education,Care_Navigation,Telehealth,Appointment_Booking
+ChatGPT,1,0,1,1,0,0
+Ada Health,1,1,0,1,0,0
+Buoy Health,1,1,0,1,0,0
+WebMD,0,1,1,0,0,0
+Mayo Clinic,0,1,1,1,0,0
+MedlinePlus,0,0,1,0,0,0
+NHS 111,0,1,0,1,0,0
+Cleveland Clinic,0,1,1,0,0,0
+Healthline,0,0,1,0,0,0
+K Health,1,1,1,1,1,0
+Symptoma,1,1,0,1,0,0
+Teladoc,0,0,0,1,1,0
+Zocdoc,0,0,0,1,0,1
